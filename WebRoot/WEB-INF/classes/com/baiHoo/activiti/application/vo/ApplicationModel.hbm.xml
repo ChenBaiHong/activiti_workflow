@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        '-//Hibernate/Hibernate Mapping DTD 3.0//EN'
+        'http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd'>
+<hibernate-mapping>
+    <class name="com.baiHoo.activiti.application.vo.ApplicationModel" table="table_Application">
+        <id name="uuid">
+            <generator class="native" />
+        </id>
+        <property name="title"/>
+        <property name="status"/>
+        <property name="docFilePath"/>
+        <property name="applyDate"/>
+        <many-to-one 
+        	name="applicant" 
+        	class="com.baiHoo.activiti.user.vo.UserModel" 
+        	column="userUuid"/>
+        <many-to-one 
+        	name="tm" 
+        	class="com.baiHoo.activiti.template.vo.TemplateModel" 
+        	column="templateUuid"/>
+       	<set name="aims" table="table_Application_ApproveInfo">
+       		<key column="applicationUuid"/>
+       		<one-to-many class="com.baiHoo.activiti.approveInfo.vo.ApproveInfoModel"/>
+       	</set>
+    </class>
+</hibernate-mapping>

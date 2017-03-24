@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        '-//Hibernate/Hibernate Mapping DTD 3.0//EN'
+        'http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd'>
+<hibernate-mapping>
+    <class name="com.baiHoo.activiti.approveInfo.vo.ApproveInfoModel" table="table_ApproveInfo">
+        <id name="uuid">
+            <generator class="native" />
+        </id>
+        <property name="approval"/>
+        <property name="comment"/>
+        <property name="approveDate"/>
+        <many-to-one 
+        	name="approver" 
+        	class="com.baiHoo.activiti.user.vo.UserModel" 
+        	column="userUuid"/>
+        <many-to-one 
+        	name="am" 
+        	class="com.baiHoo.activiti.application.vo.ApplicationModel" 
+        	column="applicationUuid"/>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        '-//Hibernate/Hibernate Mapping DTD 3.0//EN'
+        'http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd'>
+<hibernate-mapping>
+    <class name="com.baiHoo.activiti.template.vo.TemplateModel" table="table_Template">
+        <id name="uuid">
+            <generator class="native" />
+        </id>
+        <property name="name" length="32"/>
+        <property name="pdKey" length="32"/>
+        <property name="docFilePath"/>
+    </class>
+</hibernate-mapping>

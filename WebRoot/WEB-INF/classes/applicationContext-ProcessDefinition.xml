@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		"> 
+	<!-- Action -->
+	<bean id="processDefinitionAction" class="com.baiHoo.activiti.processDefinition.actionWeb.ProcessDefinitionAction" scope="prototype">
+		<property name="processDefinitionEbo" ref="processDefinitionEbo"/>
+	</bean>
+	<!-- Ebo -->
+	<bean id="processDefinitionEbo" class="com.baiHoo.activiti.processDefinition.business.ebi.ProcessDefinitionEbi">
+		<property name="processEngine" ref="processEngine"/>
+	</bean>
+</beans>

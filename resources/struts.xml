@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<!-- 提供详细报错页面，修改struts.xml后不需要重启服务器 （要求） -->
+	<constant name="struts.devMode" value="true"/>
+	<!-- struts2的主题标签默认简单 -->
+	<constant name="struts.ui.theme" value="simple"/>
+	
+	<package name="defualt" namespace="/" extends="json-default">
+		<!-- 构建拦截器 顺序很重要 -->
+		<interceptors >
+				<interceptor name="loginInterceptor" class="com.baiHoo.utils.interceptor.LoginInterceptor"/>
+				<interceptor-stack name="systemStack">
+					<interceptor-ref name="loginInterceptor"/>
+					<interceptor-ref name="defaultStack"/>
+				</interceptor-stack>
+		</interceptors>
+		<!-- //构建拦截器 -->
+		
+		<default-interceptor-ref name="systemStack"/><!-- 使用自己构建的拦截器 -->
+		
+		<global-results>
+			<result name="list">/WEB-INF/jsp/${actionName}/list.jsp</result>
+			<result name="input">/WEB-INF/jsp/${actionName}/input.jsp</result>
+			<result name="toList" type="redirectAction">${actionName}_list</result>
+			<result name="noLogin">index.jsp</result>
+			<result name="error">error.jsp</result>
+		</global-results>
+		<action name="page_*">
+			<result>/WEB-INF/jsp/{1}.jsp</result>
+		</action>
+		<!-- 用户action -->
+		<action name="user_*" class="userAction" method="{1}">
+			<result name="defaultPage">
+					/WEB-INF/jsp/defaultPage.jsp
+			</result>
+			<result name="update">
+					/WEB-INF/jsp/user/update.jsp
+			</result>
+			<result name="showList">
+					/WEB-INF/jsp/user/showList.jsp
+			</result>
+			<!-- 开始 ajax 携带数据 -->
+			<result name="ajaxLogin" type="json">
+				<param name="includeProperties">jsonData</param>
+			</result>
+			<!-- 结束 ajax 携带数据 -->
+		</action>
+		<!-- //用户action -->
+		
+		<!-- 流程定义action -->
+		<action name="processDefinition_*" class="processDefinitionAction" method="{1}">
+				<result name="viewProcessPicture" type="stream">
+					<param name="contentType">image/png</param>
+					<param name="inputName">pngStream</param>
+				</result>
+		</action>
+		<!-- //流程定义action -->
+		
+		<!-- 表单模板action -->
+		<action name="template_*" class="templateAction" method="{1}">
+				<result name="appList">/WEB-INF/jsp/template/appList.jsp</result>
+				<result name="downloadDoc" type="stream">
+						<param name="inputName">docStream</param>
+						<param name="contentDisposition">attachment;filename="${myFilename}"</param>
+				</result>
+		</action>
+		<!-- //表单模板action -->
+		
+		<!-- applicationModel -->
+		<action name="application_*" class="applicationAction" method="{1}">
+				<result name="appList">/WEB-INF/jsp/application/appList.jsp</result>
+				<result name="appUI">/WEB-INF/jsp/application/appUI.jsp</result>
+				<result name="toAppList"  type="redirectAction">application_appList</result>
+				<result name="myApplicationList">/WEB-INF/jsp/application/myApplicationList.jsp</result>
+				
+				<result name="downloadAppDoc" type="stream">
+						<param name="inputName">docStream</param>
+						<param name="contentDisposition">attachment;filename="${myFilename}"</param>
+				</result>
+				
+				<result name="showProcessPNG">/WEB-INF/jsp/tools/showProcessPNG.jsp</result>
+				<result name="viewProcessPNG" type="stream">
+						<param name="contentType">image/png</param>
+					<param name="inputName">pngStream</param>
+				</result>
+		</action>
+		<!-- //applicationModel-->
+		
+		<!-- processController -->
+		<action name="processController_*" class="processControllerAction" method="{1}">
+				<result name="myTaskList">/WEB-INF/jsp/processController/myTaskList.jsp</result>
+				<result name="approveUI">/WEB-INF/jsp/processController/approveUI.jsp</result>
+				<result name="approveInfoUI">/WEB-INF/jsp/processController/approveInfoUI.jsp</result>
+				<result name="toMyTaskList" type="redirectAction">processController_myTaskList</result>
+		</action>
+		<!-- //processController-->
+	</package>
+</struts>

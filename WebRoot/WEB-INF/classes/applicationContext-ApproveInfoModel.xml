@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		"> 
+	<!-- Action -->
+	<bean id="approveInfoAction" class="com.baiHoo.activiti.approveInfo.actionWeb.ApproveInfoAction" scope="prototype">
+		<property name="approveInfoEbo" ref="approveInfoEbo"/>
+	</bean>
+	<!-- Ebo -->
+	<bean id="approveInfoEbo" class="com.baiHoo.activiti.approveInfo.business.ebi.ApproveInfoEbi">
+		<property name="approveInfoDao" ref="approveInfoDao"/>
+	</bean>
+	<!-- Dao -->
+	<bean id="approveInfoDao" class="com.baiHoo.activiti.approveInfo.dao.impl.ApproveInfoImpl">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+</beans>

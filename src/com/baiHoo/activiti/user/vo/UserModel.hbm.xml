@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        '-//Hibernate/Hibernate Mapping DTD 3.0//EN'
+        'http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd'>
+<hibernate-mapping>
+    <class name="com.baiHoo.activiti.user.vo.UserModel" table="table_User">
+        <id name="uuid">
+            <generator class="native" />
+        </id>
+        <property name="name" length="32"/>
+        <property name="userName" length="23"/>
+        <property name="password" length="36"/>
+        <property name="email" length="32"/>
+        <property name="tele" length="32"/>
+    </class>
+</hibernate-mapping>

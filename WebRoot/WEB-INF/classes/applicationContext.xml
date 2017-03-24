@@ -1,0 +1,97 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/tx 
+		http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/aop 
+		http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/jee 
+		http://www.springframework.org/schema/jee/spring-jee-3.2.xsd
+		"> 
+	<!-- 
+		加载jdbc属性文件 
+		<context:property-placeholder location="classpath:jdbc.properties"/> 
+	-->
+	
+	<!-- 开始配置数据源 -->
+		<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+			<property name="driverClass" value="com.mysql.jdbc.Driver"/>
+			<property name="jdbcUrl" value="jdbc:mysql:///Activiti_3"/>
+			<property name="user" value="baiHoo"/>
+			<property name="password" value="baiHoo"/>
+		</bean>
+	<!-- 结束配置数据源 -->
+	
+	<!-- 开始配置本地会话工厂bean，用于创建一个SessionFactory对象 -->
+		<bean id="sessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+			<property name="dataSource" ref="dataSource"/>
+			<!-- 注入hibernate相关属性值 -->
+			<property name="hibernateProperties">
+				<props>
+					<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
+					<prop key="hibernate.hbm2ddl.auto">update</prop>
+					<prop key="hibernate.show_sql">true</prop>
+					<prop key="hibernate.format_sql">true</prop>
+				</props>
+			</property>
+			<!-- 注入hbm映射文件 -->
+			<property name="mappingDirectoryLocations">
+				<list>
+					<value>classpath:com/baiHoo/activiti/user/vo</value>
+					<value>classpath:com/baiHoo/activiti/template/vo</value>
+					<value>classpath:com/baiHoo/activiti/application/vo</value>
+					<value>classpath:com/baiHoo/activiti/approveInfo/vo</value>
+				</list>
+			</property>
+			<!-- <property name="mappingLocations">
+				<value>classpath:com/baiHoo/activiti/**/vo/*Model.hbm.xml</value>
+			</property> -->
+			<!-- <property name="packagesToScan">
+				<list>
+					<value>com.baiHoo.activiti.user.vo</value>
+					<value>com.baiHoo.activiti.template.vo</value>
+					<value>com.baiHoo.activiti.application.vo</value>
+					<value>com.baiHoo.activiti.approveInfo.vo</value>
+				</list>
+			</property> -->
+		</bean>
+	<!-- 结束配置本地会话工厂bean，用于创建一个SessionFactory对象 -->
+	
+	<!-- 开始事务管理器 -->
+		<bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+			<property name="sessionFactory" ref="sessionFactory"/>
+		</bean>
+	<!-- //结束事务管理器 -->
+	
+	<!-- 开始流程引擎配置 -->
+		<!-- 配置一个spring提供的对象，用于创建一个流程引擎配置对象 -->
+		<bean id="processEngineConfiguration" class="org.activiti.spring.SpringProcessEngineConfiguration">
+			<property name="transactionManager" ref="transactionManager"/>
+			<property name="databaseSchemaUpdate" value="true"/>
+			<!-- 必须注入数据源对象 -->
+			<property name="dataSource" ref="dataSource"/>
+		</bean>
+		
+		<!-- 创建流程引擎对象 -->
+		<bean id="processEngine" class="org.activiti.spring.ProcessEngineFactoryBean">
+			<property name="processEngineConfiguration" ref="processEngineConfiguration"/>
+		</bean>
+		
+		<bean id="repositoryService" factory-bean="processEngine" factory-method="getRepositoryService"></bean>
+	<!-- //结束流程引擎配置 -->
+	
+	<!-- <context:component-scan base-package="com.baiHoo.activiti"/> --> 
+	<!--引入spring提供的注解解析器
+		<context:annotation-config/> 
+	-->
+	
+	<!-- 开始支持事务注解 -->
+		<tx:annotation-driven transaction-manager="transactionManager"/>
+	<!-- 结束支持事务注解 -->
+</beans>

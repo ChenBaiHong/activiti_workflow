@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		"> 
+	<!-- Action -->
+	<bean id="userAction" class="com.baiHoo.activiti.user.actionWeb.UserAction" scope="prototype">
+		<property name="userEbo" ref="userEbo"/>
+		<property name="processDefinitionEbo" ref="processDefinitionEbo"/>
+		<property name="templateEbo" ref="templateEbo"/>
+	</bean>
+	<!-- Ebo -->
+	<bean id="userEbo" class="com.baiHoo.activiti.user.business.ebi.UserEbi">
+		<property name="userDao" ref="userDao"/>
+	</bean>
+	<!-- Dao -->
+	<bean id="userDao" class="com.baiHoo.activiti.user.dao.impl.UserImpl">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+</beans>
